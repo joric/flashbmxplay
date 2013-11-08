@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Bmxplay</title>
+<script src="swfobject.js"></script>
+<script>
+    var flashvars = {
+        play: "false",
+        //song: "test.bmx",
+        playlist: "playlist.m3u"
+    };
+    var params = {
+        menu: "false",
+        scale: "noScale",
+        allowFullscreen: "true",
+        allowScriptAccess: "always",
+        bgcolor: "",
+        wmode: "direct" // can cause issues with FP settings & webcam
+    };
+    var attributes = {
+        id:"bmxplay"
+    };
+    swfobject.embedSWF(
+        "bmxplay.swf", 
+        "altContent", "512", "256", "10.0.0", 
+        "expressInstall.swf", 
+        flashvars, params, attributes);
+</script>
+</head>
+<body>
+<table height=100% width=100%>
+<tr><td align=center>
+<p>
+    <div id="altContent">
+        <p><a href="http://www.adobe.com/go/getflashplayer">Get Adobe Flash player</a></p>
+    </div>
+<p>
+</td></tr></table>
+</body>
+</html>
