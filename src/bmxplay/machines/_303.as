@@ -23,6 +23,8 @@ package bmxplay.machines
 		private var s:Number;
 		public var f:Number;
 		public var q:Number;
+		public var mf:Number;
+		public var mq:Number;		
 		private var freq:Number;
 		private var freq1:Number;
 		private var dfreq:Number;
@@ -80,36 +82,32 @@ package bmxplay.machines
 			endnote = tp(2, endnote);
 			
 			fdecay = decay / 128.0;
-			
-			f = cutoff / 128.0 * 0.98 + 0.1;
-			q = resonance / 128.0 * 0.88;
-			
-			//trace("note: " + note.toString(16));
-			
+				
 			if (note != 0)
 			{
 				freq = getFreq(note + tune - 0x40);
-
+				
 				if (freq != 0)
 				{
-					amp = 1;
-					
 					//init saw generator
 					s = 0;
 					a = -32767.0;
 					
 					smax = pMasterInfo.SamplesPerSec / freq;
 					dsmax = 0;
+					
+					amp = 1;
 					damp = -(1.0 * fdecay / pMasterInfo.SamplesPerTick);
-					
 					dfreq = 0;
-					
 					da = 65536.0 / smax;
+					
+					f = mf;
+					q = mq;
 					
 					buf0 = 0;
 					buf1 = 0;
 					
-					df = f * damp;
+					df = damp * f;
 					f0 = f;
 				}
 			}
@@ -127,6 +125,9 @@ package bmxplay.machines
 					df = damp * f;
 				}
 			}
+			
+			mf = cutoff / 128.0 * 0.98 + 0.1;
+			mq = resonance / 128.0 * 0.88;			
 		}
 		
 		public override function Work(psamples:Vector.<Number>, numsamples:int, channels:int):Boolean
@@ -143,8 +144,7 @@ package bmxplay.machines
 					buf0 = buf0 + f * (pin - buf0 + fb * (buf0 - buf1));
 					buf1 = buf1 + f * (buf0 - buf1);
 					
-					//f += df; // TODO: find out why it lacks accuracy
-					f = f0 * amp;
+					f += df;
 					
 					psamples[i] = buf1;
 					

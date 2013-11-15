@@ -83,9 +83,7 @@ package bmxplay.machines
 				msd.readInt();
 				
 				wave = new Vector.<Number>(samplesize, true);
-
-				trace("machine: " + name + " loading xi, size: " + samplesize + " comp: " + compression + " type: " + sampletype + " loop length: " + looplength);
-								
+				
 				var i:int;
 				if (compression == 1) //4-bit
 				{
