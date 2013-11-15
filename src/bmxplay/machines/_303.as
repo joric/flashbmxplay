@@ -89,6 +89,7 @@ package bmxplay.machines
 			if (note != 0)
 			{
 				freq = getFreq(note + tune - 0x40);
+
 				if (freq != 0)
 				{
 					amp = 1;

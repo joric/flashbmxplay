@@ -66,8 +66,6 @@ package bmxplay
 		
 		public function dumpPattern(p:BmxPattern):void
 		{
-			trace("--- pattern name: " + p.name + " rows: " + p.numRows + " ---");
-			
 			var ngp:int = p.gdata.length / p.numRows;
 			var ntp:int = p.tdata.length / p.numRows;
 			
@@ -88,9 +86,7 @@ package bmxplay
 					var tbyte:int = p.tdata[row * ntp + tp];
 					s += tbyte.toString(16) + "\t";
 				}
-				trace(s);
 			}
-			trace("---");
 		}
 		
 		private function chr(i:int):String
@@ -127,21 +123,19 @@ package bmxplay
 			_ba.position = pos;
 			return _ba.readUTFBytes(length);
 		}
-		
+
 		public function Load(data:ByteArray):int
 		{
 			data.endian = Endian.LITTLE_ENDIAN;
-			
-			trace("Loading song, bytes: ", data.length);
-			
+
 			machines.length = 0;
 			connections.length = 0;
 			
 			if (FCC(data.readInt()) != "Buzz")
 				return -1;
-			
+
 			var numSections:int = data.readInt();
-			
+
 			for (var h:int = 0; h < numSections; ++h)
 			{
 				var fourcc:int = data.readInt();
@@ -150,7 +144,6 @@ package bmxplay
 				var lastpos:int = data.position;
 				var section:String = FCC(fourcc);				
     			data.position = offset;				
-				trace(section);
 
 				switch (section)
 				{
@@ -159,7 +152,6 @@ package bmxplay
 						for (var i:int = 0; i < numMachines; ++i)
 						{
 							var name:String = readString(data);
-							trace("machine: " + i + " name: " + name);
 							var type:int = data.readByte();
 							
 							if (type == MT_MASTER)
@@ -173,7 +165,6 @@ package bmxplay
 								{
 									var ClassRef:Class = getDefinitionByName("bmxplay.machines." + dllname) as Class;
 									m = new ClassRef() as BmxMachine;
-									trace("Loaded class: " + dllname);
 								}
 								catch (e:Error)
 								{
@@ -186,10 +177,7 @@ package bmxplay
 							m.dllname = dllname;
 							m.pMasterInfo = this;
 							m.buf = new Vector.<Number>(BUFSIZE * m.numChannels, true);
-							
-							trace("numGlobalParameters: " + m.numGlobalParameters);
-							trace("numTrackParameters: " + m.numTrackParameters);
-							
+
 							m.xPos = data.readFloat();
 							m.yPos = data.readFloat();
 							
@@ -199,18 +187,16 @@ package bmxplay
 							m.Init(msd);
 							
 							var numAttrs:int = data.readShort();
-							trace("numAttrs: " + numAttrs);
+
 							for (var k:int = 0; k < numAttrs; ++k)
 							{
 								var attrName:String = readString(data);
 								var attrValue:int = data.readInt();
-								trace("attrName: " + attrName + " attrValue: " + attrValue);
 							}
 							
 							m.GlobalVals = readArray(data, m.numGlobalParameters);
 							
 							var numTracks:int = data.readShort();
-							trace("numTracks: " + numTracks);
 							m.TrackVals = readArray(data, m.numTrackParameters * numTracks);
 							
 							machines.push(m);
@@ -219,7 +205,6 @@ package bmxplay
 					
 					case "CONN": 
 						var numConnections:int = data.readShort();
-						trace("numConnections: " + numConnections);
 						for (i = 0; i < numConnections; i++)
 						{
 							var c:BmxConnection = new BmxConnection();
@@ -227,7 +212,6 @@ package bmxplay
 							c.dst = data.readShort();
 							c.amp = data.readShort();
 							c.pan = data.readShort();
-							trace(c.src + " => " + c.dst + "\tamp: " + c.amp + "\tpan: " + c.pan);
 							connections.push(c);
 							
 							for (j = 0; j < machines.length; ++j)
@@ -247,18 +231,14 @@ package bmxplay
 
 							var numPatterns:int = data.readShort();
 							var tracks:int = data.readShort();
-							
-							//trace("mach: " + i + " patterns: " + numPatterns + " tracks: " + tracks);
-							
+
 							for (var j:int = 0; j < numPatterns; j++)
 							{
 								var p:BmxPattern = new BmxPattern();
 								p.numTracks = tracks;
 								p.name = readString(data);
 								p.numRows = data.readShort();
-								
-								//trace("sources: " + m.sources);
-								
+
 								for (k = 0; k < m.sources; ++k)
 								{
 									data.readShort();
@@ -279,11 +259,9 @@ package bmxplay
 						songsize = data.readInt();
 						startloop = data.readInt();
 						endloop = data.readInt();
-						
-						trace("songsize: " + songsize + " startloop: " + startloop + " endloop: " + endloop);
-						
+
 						var numSequences:int = data.readShort();
-						trace("numSequences: " + numSequences);
+
 						for (i = 0; i < numSequences; i++)
 						{
 							var iMachine:int = data.readShort();
@@ -291,9 +269,7 @@ package bmxplay
 							m = machines[iMachine];
 							
 							var numEvents:int = data.readInt();
-							
-							//trace("sequence: " + i + " machine: " + iMachine + " events: " + numEvents);
-							
+
 							var posSize:int = data.readByte();
 							var evtSize:int = data.readByte();
 							
@@ -303,7 +279,6 @@ package bmxplay
 								var event:int = (evtSize == 1) ? data.readByte() & 0xff : data.readShort();
 								var rec:Array = new Array(pos, event);
 								m.events.push(rec);
-								//trace(rec[0] + " -> " + rec[1]);
 							}
 						}
 						break;
@@ -319,9 +294,7 @@ package bmxplay
 						
 			PosInTick = 0;
 			TicksPerSec = SamplesPerSec / SamplesPerTick;
-			
-			trace("SamplesPerTick: " + SamplesPerTick);
-			
+
 			CurrentTick = 0;
 			TicksPerPattern = 16;
 			
@@ -444,14 +417,11 @@ package bmxplay
 								
 				if (pos == tick)
 				{
-					//trace("pos: " + pos + " tick: " + tick + " event: " + event);
-					
 					if (event >= 0x10)
 					{
 						m.currentPattern = event - 0x10;
 						m.currentRow = 0;
 						m.patternRows = m.patterns[m.currentPattern].numRows;
-						//trace("pattern: " + m.currentPattern);
 					}
 				}
 			}
@@ -505,11 +475,9 @@ package bmxplay
 					PosInTick = 0;
 				
 				BmxSmartMix(psamples, ofs, portion);
-				
-				//trace("ofs: " + ofs + " portion: " + portion);
-				
+
 				ofs += portion;
-				
+
 				count -= portion;
 			}
 		}
