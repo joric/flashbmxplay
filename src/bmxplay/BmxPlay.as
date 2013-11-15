@@ -421,7 +421,6 @@ package bmxplay
 							}
 							
 							m1.scount--;
-							
 						}
 					}
 					m.scount--;
@@ -452,7 +451,6 @@ package bmxplay
 						m.currentPattern = event - 0x10;
 						m.currentRow = 0;
 						m.patternRows = m.patterns[m.currentPattern].numRows;
-						
 						//trace("pattern: " + m.currentPattern);
 					}
 				}
@@ -527,7 +525,6 @@ package bmxplay
 				e.data.writeFloat( buf[i] * mastervolume );
 
 			BmxWorkBuffer(buf, BUFSIZE);
-						
 		}
 		
 	}

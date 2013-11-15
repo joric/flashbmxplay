@@ -53,7 +53,7 @@ package bmxplay
 			return false;
 		}
 		
-		public function getfreq(note:Number):Number
+		public function getFreq(note:Number):Number
 		{
 			if (note != 0xFF && note > 0)
 			{

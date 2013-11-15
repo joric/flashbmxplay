@@ -115,7 +115,7 @@ package bmxplay.machines
 			note = tp(0, note);
 			if (note != 0)
 			{
-				freq = getfreq(note);
+				freq = getFreq(note);
 				sn = 0;
 				dsn = freq * 256.0 / basefreq;
 				startenv();

@@ -88,7 +88,7 @@ package bmxplay.machines
 			
 			if (note != 0)
 			{
-				freq = getfreq(note + tune - 0x40);
+				freq = getFreq(note + tune - 0x40);
 				if (freq != 0)
 				{
 					amp = 1;
@@ -115,7 +115,7 @@ package bmxplay.machines
 			
 			if (endnote != 0)
 			{
-				freq1 = getfreq(endnote + tune - 0x40);
+				freq1 = getFreq(endnote + tune - 0x40);
 				
 				if (freq != 0 && slide != 0)
 				{
@@ -126,7 +126,6 @@ package bmxplay.machines
 					df = damp * f;
 				}
 			}
-		
 		}
 		
 		public override function Work(psamples:Vector.<Number>, numsamples:int, channels:int):Boolean

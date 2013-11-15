@@ -63,7 +63,7 @@ package
 		private const MODE_OSC:int = 0;
 		private const MODE_FFT:int = 1;	
 		private const modes:Array = ["Waveform", "FFT (db)", "FFT (amp)"];		
-		private var mode:int = MODE_FFT;
+		private var mode:int = MODE_OSC;
 		public var bytes:ByteArray = new ByteArray();
 		
 		public function loadSong(url:String):void
