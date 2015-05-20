@@ -16,7 +16,7 @@ package bmxplay
 	{
 		//list all machines in the package (for getDefinitionByName)
 		private var imports:Array = [_303, _xi, _filter, _delay, _voice];
-		
+
 		public var BUFSIZE:int = 2048;
 
 		public var BeatsPerMin:int;
@@ -483,12 +483,12 @@ package bmxplay
 		}
 
 		private function sampleData(e:SampleDataEvent):void
-		{							
+		{
 			callbackHandler();
 			
 			//note SampleData API only allows between 2048 and 8192 samples for continued playback			
 			var mastervolume:Number = 1.0 / 32767.0;
-						
+
 			for (var i:int = 0; i < BUFSIZE*2; ++i)
 				e.data.writeFloat( buf[i] * mastervolume );
 

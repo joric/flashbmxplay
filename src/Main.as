@@ -64,7 +64,7 @@ package
 		private const MODE_OSC:int = 0;
 		private const MODE_FFT:int = 1;	
 		private const modes:Array = ["Waveform", "FFT (db)", "FFT (amp)"];		
-		private var mode:int = MODE_OSC;
+		private var mode:int = MODE_FFT;
 		public var bytes:ByteArray = new ByteArray();
 		
 		public function loadSong(url:String):void
@@ -432,11 +432,11 @@ package
 
 		public function callback():void
 		{
-			SoundMixer.computeSpectrum(bytes, mode==MODE_FFT, 0);
+			//SoundMixer.computeSpectrum(bytes, mode==MODE_FFT, 0);
 		}
 		
 		private function drawWave():void
-		{			
+		{
 			var fft:Boolean = (mode == MODE_FFT);
 			var x:int;
 			var y:int;
@@ -459,6 +459,7 @@ package
 				{
 					l = player.buf[i * 2 + 0];
 					r = player.buf[i * 2 + 1];
+
 					amp = (l + r) / 2;
 					if (i & 1)
 						m_fr[i / 2] = amp;
@@ -474,6 +475,12 @@ package
 				{
 					x = i; // window?
 					j = i; // scale?
+
+					var fft_ofs:int = 10;
+					var fft_window:int = fft_size * 0.5 - fft_ofs;
+
+					j = fft_ofs + i * fft_window / w;
+
 					amp = Math.sqrt( m_fr[j] * m_fr[j] + m_fi[j] * m_fi[j] ) / 32768.0;
 					amp *= m_scale;
 					if (amp > m_maxamp)
