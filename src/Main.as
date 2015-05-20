@@ -424,7 +424,7 @@ package
 		{
 			switch (e.keyCode)
 			{
-				case 114: //F3					
+				case 114: //F3
 					browse();
 					break;
 			}
@@ -496,11 +496,18 @@ package
 
 			var fft_size:int = 1 << m_bits;
 
+			var i:int;
+			var amp:Number;
+			var r:int;
+			var l:int;
+
 			if (fft)
 			{
-				for (var i:int = 0; i < fft_size*2; i++)
+				for (i = 0; i < fft_size * 2; i++)
 				{
-					var amp:Number = player.buf[i*2];
+					l = player.buf[i * 2 + 0];
+					r = player.buf[i * 2 + 1];
+					amp = (l + r) / 2;
 					if (i & 1)
 						m_fr[i / 2] = amp;
 					else
@@ -539,7 +546,10 @@ package
 				for (i = 0; i < 512; i++)
 				{
 					x = i;
-					amp = player.buf[i * 2] / 32768.0;
+					l = player.buf[i * 2 + 0];
+					r = player.buf[i * 2 + 1];
+					amp = (l + r) / 2;
+					amp /= 32768.0;
 					y = h - (amp * h / 2 + h / 2);
 					if (i == 0)
 					{
