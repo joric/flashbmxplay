@@ -64,7 +64,7 @@ package
 		private const MODE_OSC:int = 0;
 		private const MODE_FFT:int = 1;	
 		private const modes:Array = ["Waveform", "FFT (db)", "FFT (amp)"];		
-		private var mode:int = MODE_FFT;
+		private var mode:int = MODE_OSC;
 		public var bytes:ByteArray = new ByteArray();
 		
 		public function loadSong(url:String):void
@@ -429,54 +429,6 @@ package
 					break;
 			}
 		}
-		
-		private function Line(x1:int, y1:int, x2:int, y2:int, color:uint):void
-		{
-			var d:int, ax:int, ay:int, sx:int, sy:int, dx:int, dy:int;
-			dx = x2 - x1;
-			ax = Math.abs(dx) << 1;
-			if (dx < 0)
-				sx = -1;
-			else
-				sx = 1;
-			dy = y2 - y1;
-			ay = Math.abs(dy) << 1;
-			if (dy < 0)
-				sy = -1;
-			else
-				sy = 1;
-			m_bitmap.setPixel(x1, y1, color);
-			if (ax > ay)
-			{
-				d = ay - (ax >> 1);
-				while (x1 != x2)
-				{
-					if (d >= 0)
-					{
-						y1 += sy;
-						d -= ax;
-					}
-					x1 += sx;
-					d += ay;
-					m_bitmap.setPixel(x1, y1, color);
-				}
-			}
-			else
-			{
-				d = ax - (ay >> 1);
-				while (y1 != y2)
-				{
-					if (d >= 0)
-					{
-						x1 += sx;
-						d -= ay;
-					}
-					y1 += sy;
-					d += ax;
-					m_bitmap.setPixel(x1, y1, color);
-				}
-			}
-		}
 
 		public function callback():void
 		{
@@ -556,7 +508,12 @@ package
 						x0 = x;
 						y0 = y;
 					}
-					Line(x0, y0, x, y, 0x00ff00);
+
+					if (y > y0) for (j = y0; j <= y; j++)
+						m_bitmap.setPixel(x, j, 0x00ff00);
+					else for (j = y; j <= y0; j++)
+						m_bitmap.setPixel(x, j, 0x00ff00);
+
 					x0 = x;
 					y0 = y;
 				}
