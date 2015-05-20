@@ -509,10 +509,12 @@ package
 						y0 = y;
 					}
 
-					if (y > y0) for (j = y0; j <= y; j++)
-						m_bitmap.setPixel(x, j, 0x00ff00);
-					else for (j = y; j <= y0; j++)
-						m_bitmap.setPixel(x, j, 0x00ff00);
+					if (y > y0)
+						for (j = y0; j <= y; j++)
+							m_bitmap.setPixel(x, j, 0x00ff00);
+					else
+						for (j = y; j <= y0; j++)
+							m_bitmap.setPixel(x, j, 0x00ff00);
 
 					x0 = x;
 					y0 = y;
