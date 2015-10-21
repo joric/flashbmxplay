@@ -23,6 +23,8 @@ package bmxplay.machines
 			numGlobalParameters = 3;
 			numTrackParameters = 0;
 			numChannels = 1;
+			buf0 = 0;
+			buf1 = 0;
 		}
 		
 		public override function Tick():void
@@ -34,9 +36,6 @@ package bmxplay.machines
 			f = param1 / 128.0 * 0.99;
 			q = param2 / 128.0 * 0.98;
 			d = param3 / 128.0;
-			
-			buf0 = 0;
-			buf1 = 0;
 		}
 		
 		public override function Work(psamples:Vector.<Number>, numsamples:int, channels:int):Boolean
